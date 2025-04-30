@@ -5,7 +5,7 @@ import plotly.express as px
 import os
 
 # Konfigurasi halaman
-st.set_page_config(page_title="Dashboard PLTU OM-2", layout="wide")
+st.set_page_config(page_title="Dashboard PLTU ANGGREK", layout="wide")
 
 # Pastikan folder data tersedia
 os.makedirs("data", exist_ok=True)
