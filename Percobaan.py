@@ -64,7 +64,12 @@ if selected == "Home":
                         fig = px.line(df_sorted, x="Month", y=colname, title="", markers=True)
 
                         # Menambahkan bayangan dan warna pada grafik
-                        fig.update_traces(line=dict(width=2), marker=dict(size=6), line_shape="spline")
+                        fig.update_traces(
+                            line=dict(width=3),  # Lebar garis lebih tebal
+                            marker=dict(size=6),  # Ukuran marker
+                            line_shape="spline",  # Bentuk garis melengkung
+                            opacity=0.8  # Efek bayangan garis
+                        )
                         fig.update_layout(
                             plot_bgcolor="#F5F5F5",  # Background abu-abu terang
                             paper_bgcolor="#FFFFFF",  # Background putih
@@ -77,7 +82,12 @@ if selected == "Home":
                         fig = px.line(df, x=df.index, y=colname, title="", markers=True)
 
                         # Menambahkan bayangan dan warna pada grafik
-                        fig.update_traces(line=dict(width=2), marker=dict(size=6), line_shape="spline")
+                        fig.update_traces(
+                            line=dict(width=3),  # Lebar garis lebih tebal
+                            marker=dict(size=6),  # Ukuran marker
+                            line_shape="spline",  # Bentuk garis melengkung
+                            opacity=0.8  # Efek bayangan garis
+                        )
                         fig.update_layout(
                             plot_bgcolor="#F5F5F5",  # Background abu-abu terang
                             paper_bgcolor="#FFFFFF",  # Background putih
