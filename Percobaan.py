@@ -68,14 +68,14 @@ if selected == "Home":
                             line=dict(width=3),  # Lebar garis lebih tebal
                             marker=dict(size=6),  # Ukuran marker
                             line_shape="spline",  # Bentuk garis melengkung
-                            opacity=0.8  # Efek bayangan garis
+                            opacity=0.9  # Efek bayangan garis
                         )
                         fig.update_layout(
-                            plot_bgcolor="#F5F5F5",  # Background abu-abu terang
-                            paper_bgcolor="#FFFFFF",  # Background putih
+                            plot_bgcolor="black",  # Background hitam
+                            paper_bgcolor="black",  # Paper background hitam
                             margin=dict(l=20, r=20, t=20, b=20),
                             height=300,
-                            title_font=dict(size=14, color="black"),
+                            title_font=dict(size=14, color="white"),
                             title_x=0.5,  # Center title
                         )
                     else:
@@ -86,14 +86,14 @@ if selected == "Home":
                             line=dict(width=3),  # Lebar garis lebih tebal
                             marker=dict(size=6),  # Ukuran marker
                             line_shape="spline",  # Bentuk garis melengkung
-                            opacity=0.8  # Efek bayangan garis
+                            opacity=0.9  # Efek bayangan garis
                         )
                         fig.update_layout(
-                            plot_bgcolor="#F5F5F5",  # Background abu-abu terang
-                            paper_bgcolor="#FFFFFF",  # Background putih
+                            plot_bgcolor="black",  # Background hitam
+                            paper_bgcolor="black",  # Paper background hitam
                             margin=dict(l=20, r=20, t=20, b=20),
                             height=300,
-                            title_font=dict(size=14, color="black"),
+                            title_font=dict(size=14, color="white"),
                             title_x=0.5,  # Center title
                         )
 
