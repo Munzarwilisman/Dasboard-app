@@ -55,18 +55,7 @@ if selected == "Home":
                     else:
                         fig = px.line(df, x=df.index, y=colname, title="", markers=True)
 
-                    # Update layout for dark background
-                    fig.update_layout(
-                        plot_bgcolor='black',  # Dark plot area
-                        paper_bgcolor='black',  # Dark background for the entire plot
-                        font=dict(color='white'),  # White font color for contrast
-                        margin=dict(l=10, r=10, t=10, b=10), 
-                        height=300
-                    )
-                    # Update axis labels and ticks color for readability
-                    fig.update_xaxes(title_text='', tickangle=45, showgrid=False, ticks='inside', tickcolor='white')
-                    fig.update_yaxes(title_text='', showgrid=False, ticks='inside', tickcolor='white')
-
+                    fig.update_layout(margin=dict(l=10, r=10, t=10, b=10), height=300)
                     st.plotly_chart(fig, use_container_width=True)
 
 # Halaman Performance Indikator
@@ -84,13 +73,27 @@ elif selected == "Performance Indikator":
             else:
                 df = pd.read_excel(uploaded_file)
 
-            st.session_state.df = df
+            st.session_state.df = df  # Simpan dataframe ke session_state
             st.success("✅ Data berhasil diunggah!")
         else:
             st.info("Silakan upload file terlebih dahulu untuk menampilkan grafik.")
     else:
+        # Tampilkan data yang sudah ada di session_state
         df = st.session_state.df
         st.dataframe(df.head())
+
+        # Opsi untuk memperbarui file
+        uploaded_file = st.file_uploader("📄 Upload file data (CSV atau Excel) untuk mengganti data", type=["csv", "xlsx"])
+
+        if uploaded_file is not None:
+            # Baca file baru dan perbarui session_state
+            if uploaded_file.name.endswith(".csv"):
+                df = pd.read_csv(uploaded_file)
+            else:
+                df = pd.read_excel(uploaded_file)
+
+            st.session_state.df = df  # Update session_state dengan data baru
+            st.success("✅ Data berhasil diperbarui!")
 
     # Mendapatkan nama parameter/kolom
     columns = df.columns.tolist()
