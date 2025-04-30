@@ -55,7 +55,18 @@ if selected == "Home":
                     else:
                         fig = px.line(df, x=df.index, y=colname, title="", markers=True)
 
-                    fig.update_layout(margin=dict(l=10, r=10, t=10, b=10), height=300)
+                    # Update layout for dark background
+                    fig.update_layout(
+                        plot_bgcolor='black',  # Dark plot area
+                        paper_bgcolor='black',  # Dark background for the entire plot
+                        font=dict(color='white'),  # White font color for contrast
+                        margin=dict(l=10, r=10, t=10, b=10), 
+                        height=300
+                    )
+                    # Update axis labels and ticks color for readability
+                    fig.update_xaxes(title_text='', tickangle=45, showgrid=False, ticks='inside', tickcolor='white')
+                    fig.update_yaxes(title_text='', showgrid=False, ticks='inside', tickcolor='white')
+
                     st.plotly_chart(fig, use_container_width=True)
 
 # Halaman Performance Indikator
