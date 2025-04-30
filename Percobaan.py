@@ -3,13 +3,9 @@ from streamlit_option_menu import option_menu
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import os
 
 # Konfigurasi halaman
-st.set_page_config(page_title="Dashboard PLTU ANGGREK", layout="wide")
-
-# Pastikan folder data tersedia
-os.makedirs("data", exist_ok=True)
+st.set_page_config(page_title="Dashboard PLTU OM-2", layout="wide")
 
 # Sidebar menu
 with st.sidebar:
@@ -21,15 +17,9 @@ with st.sidebar:
         default_index=0,
     )
 
-# Load atau simpan data ke session_state
-if "df" not in st.session_state:
-    if os.path.exists("data/last_upload.csv"):
-        df = pd.read_csv("data/last_upload.csv")
-        st.session_state.df = df
-
 # Halaman Home: Dashboard Parameter Langsung
 if selected == "Home":
-    st.title("📊 DASBOARD PLTU ANGGREK")
+    st.title("📈 Dashboard Parameter PLTU OM-2")
     st.markdown("Tampilan ringkas dari semua parameter dalam bentuk grafik tren.")
 
     if "df" not in st.session_state:
@@ -62,70 +52,39 @@ if selected == "Home":
                     if date_column:
                         df_sorted = df.sort_values(by=date_column)
                         fig = px.line(df_sorted, x="Month", y=colname, title="", markers=True)
-
-                        # Menambahkan bayangan dan warna pada grafik
-                        fig.update_traces(
-                            line=dict(width=3),  # Lebar garis lebih tebal
-                            marker=dict(size=6),  # Ukuran marker
-                            line_shape="spline",  # Bentuk garis melengkung
-                            opacity=0.9  # Efek bayangan garis
-                        )
-                        fig.update_layout(
-                            plot_bgcolor="black",  # Background hitam
-                            paper_bgcolor="black",  # Paper background hitam
-                            margin=dict(l=20, r=20, t=20, b=20),
-                            height=300,
-                            title_font=dict(size=14, color="white"),
-                            title_x=0.5,  # Center title
-                        )
                     else:
                         fig = px.line(df, x=df.index, y=colname, title="", markers=True)
 
-                        # Menambahkan bayangan dan warna pada grafik
-                        fig.update_traces(
-                            line=dict(width=3),  # Lebar garis lebih tebal
-                            marker=dict(size=6),  # Ukuran marker
-                            line_shape="spline",  # Bentuk garis melengkung
-                            opacity=0.9  # Efek bayangan garis
-                        )
-                        fig.update_layout(
-                            plot_bgcolor="black",  # Background hitam
-                            paper_bgcolor="black",  # Paper background hitam
-                            margin=dict(l=20, r=20, t=20, b=20),
-                            height=300,
-                            title_font=dict(size=14, color="white"),
-                            title_x=0.5,  # Center title
-                        )
-
-                    # Ubah warna garis agar berbeda untuk setiap grafik
-                    fig.update_traces(line_color=px.colors.qualitative.Set2[i % len(px.colors.qualitative.Set2)])
-
+                    fig.update_layout(margin=dict(l=10, r=10, t=10, b=10), height=300)
                     st.plotly_chart(fig, use_container_width=True)
 
 # Halaman Performance Indikator
 elif selected == "Performance Indikator":
     st.title("📊 Performance Indikator")
 
+    # Menggunakan session_state untuk menyimpan data
     if "df" not in st.session_state:
         uploaded_file = st.file_uploader("📄 Upload file data (CSV atau Excel)", type=["csv", "xlsx"])
 
         if uploaded_file is not None:
+            # Baca file
             if uploaded_file.name.endswith(".csv"):
                 df = pd.read_csv(uploaded_file)
-                df.to_csv("data/last_upload.csv", index=False)
             else:
                 df = pd.read_excel(uploaded_file)
-                df.to_csv("data/last_upload.csv", index=False)
+
             st.session_state.df = df
             st.success("✅ Data berhasil diunggah!")
         else:
             st.info("Silakan upload file terlebih dahulu untuk menampilkan grafik.")
-            st.stop()
     else:
         df = st.session_state.df
         st.dataframe(df.head())
 
+    # Mendapatkan nama parameter/kolom
     columns = df.columns.tolist()
+
+    # Filter kolom tanggal atau bulan agar tidak dibuatkan card
     date_columns = df.select_dtypes(include=["datetime", "object"]).columns.tolist()
     exclude_columns = [col for col in columns if col in date_columns]
     columns_to_display = [col for col in columns if col not in exclude_columns]
@@ -133,6 +92,7 @@ elif selected == "Performance Indikator":
     st.markdown("---")
     st.subheader("📈 Dashboard Parameter")
 
+    # Pilih kolom tanggal atau bulan untuk digunakan sebagai X-Axis
     date_column = None
     for col in columns:
         if pd.to_datetime(df[col], errors='coerce').notna().all():
@@ -144,7 +104,7 @@ elif selected == "Performance Indikator":
         df['Month'] = df[date_column].dt.month_name()
 
     for col in columns_to_display:
-        with st.expander(f"🟢 {col}"):
+        with st.expander(f"🔲 {col}"):
             st.subheader("📊 Statistika")
             st.write(f"**Mean:** {df[col].mean():.2f}")
             st.write(f"**Median:** {df[col].median():.2f}")
@@ -161,22 +121,22 @@ elif selected == "Performance Indikator":
 
             if date_column:
                 if chart_type == "Line":
-                    fig = px.line(df, x='Month', y=col)
+                    fig = px.line(df, x='Month', y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Bar":
-                    fig = px.bar(df, x='Month', y=col)
+                    fig = px.bar(df, x='Month', y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Area":
-                    fig = px.area(df, x='Month', y=col)
+                    fig = px.area(df, x='Month', y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Scatter":
-                    fig = px.scatter(df, x='Month', y=col)
+                    fig = px.scatter(df, x='Month', y=col, title=f"{col} - {chart_type} Chart")
             else:
                 if chart_type == "Line":
-                    fig = px.line(df, x=df.index, y=col)
+                    fig = px.line(df, x=df.index, y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Bar":
-                    fig = px.bar(df, x=df.index, y=col)
+                    fig = px.bar(df, x=df.index, y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Area":
-                    fig = px.area(df, x=df.index, y=col)
+                    fig = px.area(df, x=df.index, y=col, title=f"{col} - {chart_type} Chart")
                 elif chart_type == "Scatter":
-                    fig = px.scatter(df, x=df.index, y=col)
+                    fig = px.scatter(df, x=df.index, y=col, title=f"{col} - {chart_type} Chart")
 
             st.plotly_chart(fig, use_container_width=True)
 
