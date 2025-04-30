@@ -28,7 +28,7 @@ if "df" not in st.session_state:
 
 # Halaman Home: Dashboard Parameter Langsung
 if selected == "Home":
-    st.title("\U0001F4C8 Dashboard Parameter PLTU OM-2")
+    st.title("\U0001F4C8 Dashboard Parameter PLTU ANGGREK")
     st.markdown("Tampilan ringkas dari semua parameter dalam bentuk grafik tren.")
 
     if "df" not in st.session_state:
